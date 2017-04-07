@@ -1,14 +1,14 @@
 package goscrapyd
 
 import (
-	"testing"
-	"fmt"
-	"net/url"
-	"net/http/httptest"
-	"net/http"
-	"io/ioutil"
-	"strings"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"strings"
+	"testing"
 )
 
 func TestNewScrapyd(t *testing.T) {
@@ -28,15 +28,12 @@ func TestBuildUrl(t *testing.T) {
 
 	s := NewScrapyd(host)
 
-	var expected_url = fmt.Sprintf("%v/%v", host, "addversion.json");
+	var expected_url = fmt.Sprintf("%v/%v", host, "addversion.json")
 
 	if path, _ := s.buildUrl(add_version_endpoint); strings.Compare(expected_url, path) != 0 {
 		t.Errorf("Expected %q, got %q", expected_url, path)
 	}
 }
-
-
-
 
 func TestHttpGet(t *testing.T) {
 
@@ -53,10 +50,9 @@ func TestHttpGet(t *testing.T) {
 	su, _ := url.Parse(server.URL)
 	s := NewScrapyd(fmt.Sprintf("%v://%v", su.Scheme, su.Host))
 
-
 	params := make(map[string]string)
 
-	u, _:= url.Parse(server.URL)
+	u, _ := url.Parse(server.URL)
 	resp, err := s.get(u.String(), params)
 	if err != nil {
 		t.Fatal(err)
@@ -109,9 +105,6 @@ func TestLitsJobs(t *testing.T) {
 		t.Errorf("request body mismatch: got %q, want %q", resp, *sr)
 	}
 }
-
-
-
 
 // testServer returns an ServeMux, and Server. The caller must close the test
 // server.
