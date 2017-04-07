@@ -105,7 +105,7 @@ func (s *Scrapyd) ListJobs(project string) (*ScrapydJobListResponse, *http.Respo
 	}
 	opt := Options{"scraper"}
 
-	resp, err := s.sling.Get(endpoints[list_jobs_endpoint]).QueryStruct(opt).Receive(joblist, scrapydError)
+	resp, err := s.sling.New().Get(endpoints[list_jobs_endpoint]).QueryStruct(opt).Receive(joblist, scrapydError)
 
 	if err != nil {
 		return nil, resp, scrapydError
@@ -144,10 +144,7 @@ func (s *Scrapyd) Schedule(project string, spider string, settings map[string]st
 		}
 	}
 
-	s.sling.Post(endpoints[schedule_endpoint])
-	s.sling.Set("Content-Type", "application/x-www-form-urlencoded")
-	s.sling.Body(bytes.NewBufferString(b.Encode()))
-	resp, err := s.sling.Receive(schedule, scrapydError)
+	resp, err := s.sling.New().Post(endpoints[schedule_endpoint]).Set("Content-Type", "application/x-www-form-urlencoded").Body(bytes.NewBufferString(b.Encode())).Receive(schedule, scrapydError)
 
 	if err != nil {
 		return nil, resp, scrapydError
