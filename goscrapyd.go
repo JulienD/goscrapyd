@@ -151,3 +151,27 @@ func (s *Scrapyd) Schedule(project string, spider string, settings map[string]st
 	}
 	return schedule, resp, err
 }
+
+
+
+type ScrapydCancelResponse struct {
+	Status   string `json:"status"`
+	Prevstate string `json:"prevstate"`
+}
+
+func (s *Scrapyd) Cancel(project string, jobId string) (*ScrapydCancelResponse, *http.Response, error) {
+
+	scrapyResp := new(ScrapydCancelResponse)
+	scrapyRespError := new(ScrapydError)
+
+	b := url.Values{}
+	b.Add("project", project)
+	b.Add("job", jobId)
+
+	resp, err := s.sling.New().Post(endpoints[cancel_endpoint]).Set("Content-Type", "application/x-www-form-urlencoded").Body(bytes.NewBufferString(b.Encode())).Receive(scrapyResp, scrapyRespError)
+
+	if err != nil {
+		return nil, resp, scrapyRespError
+	}
+	return scrapyResp, resp, err
+}
